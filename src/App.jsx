@@ -157,7 +157,7 @@ export default function App() {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = "ja-JP";
-      utterance.rate = 2.5;
+      utterance.rate = 3.0;
       utterance.onend = () => setIsSpeaking(false);
       utterance.onerror = () => setIsSpeaking(false);
 
@@ -220,7 +220,7 @@ export default function App() {
       </div>
 
       {tab === "editor" ? (
-        <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 390px", gap: 18, padding: 18, alignItems: "start" }}>
+        <div className="app-grid" style={{ padding: 18 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #dce3f0", padding: 14, display: "flex", flexDirection: "column", gap: 10 }}>
               <ModeTabs modes={MODES} activeMode={mode} onChange={setMode} />
@@ -250,7 +250,20 @@ export default function App() {
               />
             </div>
 
-            <div style={{ color: "#8b96ab", fontSize: 12, padding: "0 2px" }}>{text.length}文字</div>
+            <div
+              style={{
+                alignSelf: "flex-start",
+                color: "#4f607b",
+                fontSize: 12,
+                fontWeight: 700,
+                padding: "4px 9px",
+                background: "#fff",
+                border: "1px solid #dce3f0",
+                borderRadius: 999,
+              }}
+            >
+              文字数: {text.length}文字
+            </div>
 
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
               {filterOptions.map((option) => {
@@ -312,7 +325,7 @@ export default function App() {
             </div>
           </div>
 
-          <div style={{ position: "sticky", top: 18, alignSelf: "start" }}>
+          <div className="app-sidebar">
             <div style={{ background: "#f9fbff", border: "1px solid #dde3ef", borderRadius: 12, padding: 18, maxHeight: "calc(100vh - 36px)", overflowY: "auto" }}>
               <div style={{ fontWeight: 800, color: "#203555", marginBottom: 10 }}>問題一覧</div>
               <ResultList issues={filteredIssues} activeIssueId={activeIssueId} issueRefs={issueRefs} onClickIssue={handleIssueClick} />

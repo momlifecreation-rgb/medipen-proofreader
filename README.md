@@ -1,21 +1,29 @@
 # medipen 校正ツール
 
-React + Vite で動く、ブラウザ完結型の校正支援ツールです。
+React + Vite で作成した、メディペン向けの独立型校正ツールです。
 
-## 開発を始める
-
+## 開発時
 ```bash
 npm install
 npm run dev
 ```
 
-## GitHub Pages に公開する
-
-1. `vite.config.js` の `YOUR_REPOSITORY_NAME` を実際のリポジトリ名に変更
-2. `package.json` の `homepage` を自分の GitHub ユーザー名とリポジトリ名に変更
-3. 次を実行
-
+## サーバー設置用ビルド
 ```bash
 npm run build
-npm run deploy
 ```
+
+ビルド後は `dist` フォルダが作成されます。`dist` の中身をそのままサーバーの設置先へアップロードしてください。
+
+想定設置先:
+
+```text
+https://medi-p.net/tools/kousei/
+```
+
+このプロジェクトは `vite.config.js` の `base: "./"` により、サブディレクトリ配下でも相対パスで動作するようにしてあります。
+
+## GitHub Pages で確認する場合
+GitHub 上で動作確認したい場合は、`main` ブランチへ push すると GitHub Actions が自動でビルドして Pages に公開します。
+
+GitHub のリポジトリ設定では、`Settings` → `Pages` → `Build and deployment` の `Source` を `GitHub Actions` にしてください。

@@ -24,7 +24,7 @@ export default function EditorPane({ text, onChange, issues, activeIssueId, onCl
     <div
       style={{
         position: "relative",
-        minHeight: 520,
+        minHeight: "68vh",
         border: "1px solid #d5deed",
         borderRadius: 10,
         background: "#fff",
@@ -57,7 +57,7 @@ export default function EditorPane({ text, onChange, issues, activeIssueId, onCl
         style={{
           position: "relative",
           width: "100%",
-          minHeight: 520,
+          minHeight: "68vh",
           padding: 13,
           border: "none",
           resize: "vertical",

@@ -1,0 +1,29 @@
+.app-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 390px;
+  gap: 18px;
+  align-items: start;
+}
+
+.app-sidebar {
+  position: sticky;
+  top: 18px;
+  align-self: start;
+}
+
+@media (max-width: 960px) {
+  .app-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-sidebar {
+    position: static;
+    top: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-grid {
+    gap: 14px;
+  }
+}
