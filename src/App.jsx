@@ -5,12 +5,17 @@ import NoticeBox from "./components/NoticeBox";
 import ResultList from "./components/ResultList";
 import { DEFAULT_CUSTOM_RULES, PROOFREADING_TYPE_META } from "./data/proofreadingRules";
 import { SAMPLE_TEXTS } from "./data/sampleTexts";
-import { analyzeMedicalAdText } from "./utils/analyzeMedicalAdText";
-import { analyzeProofreadingText } from "./utils/analyzeProofreadingText";
-import { analyzeReferenceText } from "./utils/analyzeReferenceText";
-import { analyzeYakkiText } from "./utils/analyzeYakkiText";
+import { analyzeByMode } from "./utils/analyzeByMode";
 
 const MODES = [
+  {
+    key: "animalMedical",
+    label: "動物医療チェッカー",
+    description: "基本の文章校正に加え、動物医療の用語統一表に沿って採用表記を確認します。",
+    noticeTitle: "動物医療の用語統一表",
+    noticeText: "文脈で使い分ける語は備考を確認してください。レイアウト、書体、図表の配置や未確定のルールは目視確認が必要です。",
+    sampleKey: "animalMedical",
+  },
   {
     key: "proofreading",
     label: "文章校正モード",
@@ -55,23 +60,11 @@ function getModeConfig(mode) {
   return MODES.find((item) => item.key === mode) ?? MODES[0];
 }
 
-function analyzeByMode(mode, text, customRules) {
-  switch (mode) {
-    case "reference":
-      return analyzeReferenceText(text);
-    case "medicalAd":
-      return analyzeMedicalAdText(text);
-    case "yakki":
-      return analyzeYakkiText(text);
-    case "proofreading":
-    default:
-      return analyzeProofreadingText(text, customRules);
-  }
-}
-
 function buildFilterOptions(mode, issues) {
-  if (mode !== "proofreading") return [{ key: "all", label: "すべて" }];
   const entries = Object.entries(PROOFREADING_TYPE_META).map(([key, meta]) => ({ key, label: meta.label }));
+  issues.forEach((issue) => {
+    if (!entries.some((entry) => entry.key === issue.type)) entries.push({ key: issue.type, label: issue.label });
+  });
   return [{ key: "all", label: "すべて" }, ...entries].filter(
     (option) => option.key === "all" || issues.some((issue) => issue.type === option.key),
   );
@@ -225,6 +218,7 @@ export default function App() {
             <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #dce3f0", padding: 14, display: "flex", flexDirection: "column", gap: 10 }}>
               <ModeTabs modes={MODES} activeMode={mode} onChange={setMode} />
               <div style={{ color: "#4f607b", lineHeight: 1.7, fontSize: 13 }}>{modeConfig.description}</div>
+              <div style={{ color: "#72809b", fontSize: 12 }}>基本チェック：常に有効（表記ゆれ・ひらがな推奨・文体・空白・カスタム辞書など）{mode !== "proofreading" ? " ＋ 選択モードの追加チェック" : ""}</div>
               <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
                 <button
                   onClick={() => setText(SAMPLE_TEXTS[modeConfig.sampleKey])}
@@ -336,7 +330,7 @@ export default function App() {
         <div style={{ padding: 28, maxWidth: 760, margin: "0 auto" }}>
           <div style={{ fontSize: 20, fontWeight: 800, color: "#1a1f3c", marginBottom: 8 }}>カスタム辞書</div>
           <div style={{ color: "#6c7890", marginBottom: 18, lineHeight: 1.7 }}>
-            文章校正モードで使う独自ルールを追加できます。ほかのモードでは実行しません。
+            すべてのモードの基本チェックで使う独自ルールを追加できます。
           </div>
           <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
             <input

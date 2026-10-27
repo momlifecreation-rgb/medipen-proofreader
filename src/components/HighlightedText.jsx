@@ -29,9 +29,9 @@ export default function HighlightedText({ text, issues, activeIssueId, onClickMa
     }
 
     const issue = issueById[currentId];
-    const end = Math.min(issue.end, text.length);
-    segments.push({ type: "mark", issueId: currentId, start: issue.start, end });
-    cursor = end;
+    const start = cursor;
+    while (cursor < text.length && covered[cursor] === currentId) cursor += 1;
+    segments.push({ type: "mark", issueId: currentId, start, end: cursor });
   }
 
   return (
